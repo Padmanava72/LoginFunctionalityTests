@@ -19,44 +19,75 @@ public class un_successfull_Login {
 	String correctusername = "padmanava720@gmail.com";
 	String incorrectpassword = "Paddy$7736";
 	String expectedError = "Please enter a correct username and password. Note that both fields may be case-sensitive.";
+	String incorrecrpassword2 = " Paddy$7736";
+	String incorrecrpassword3 = " Paddy$7735";
 
 	// To launch an empty browser
 	@BeforeClass
 	public void toLaunchthebrowser() {
-		driver = new ChromeDriver();                                        // to launch an empty browser
-		Reporter.log("Successfully browser git launched", true);            //to print the statement and add to the report on the indes and email based
-		driver.manage().window().maximize();                                // to maximize the browser
+		driver = new ChromeDriver();                             // to launch the chrome browser
+		Reporter.log("Successfully browser git launched", true); // to display in the console and generate the report on the mail and index based
+		driver.manage().window().maximize();                     // to maximize the window
 		Reporter.log("Successfully browser got maximized", true);
-		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(15));  // to wait till webElement are loaded
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(15)); // to wait till webElement are loaded
 	}
 
 	// To nevigate to the application page and verify
 	@BeforeMethod
 	public void toNevigatetoApplication() {
-		driver.get("https://app.germanyiscalling.com/common/login/?next=https%3A%2F%2Fapp.germanyiscalling.com%2Fcv%2Fhome%2F");       // to nevigate to the application
-		String actuaHomepageTitle = driver.getTitle();                    //to save the title of the webpage 
-		Assert.assertEquals(actuaHomepageTitle, expectedHomepageTitle);   // to verify same page is opened or not
+		driver.get("https://app.germanyiscalling.com/common/login/?next=https%3A%2F%2Fapp.germanyiscalling.com%2Fcv%2Fhome%2F"); // to nevigate to the application
+		String actuaHomepageTitle = driver.getTitle();                  //to store the homepage title
+		Assert.assertEquals(actuaHomepageTitle, expectedHomepageTitle); // to verify same page is opened or not
 		Reporter.log("successfully nevigated to German is calling login webpage", true);
 	}
 
 	// to check for the unsuccessfull login page
 	@Test
 	public void toCheckforUnsuccessfullLogin() {
-		WebElement username = driver.findElement(By.id("username"));      // to identify the webElement of the Username textfield and store the webelement
-		WebElement password = driver.findElement(By.id("password"));      // to identify the webelement of the password text field and store the webelement
-		username.sendKeys(correctusername);                               // successfully enter the username
-		password.sendKeys(incorrectpassword);                             // successfully enter the password
+		WebElement username = driver.findElement(By.id("username")); // to identify the webElement of the Username textfield
+		WebElement password = driver.findElement(By.id("password")); // to identify the webelement of the password textfield
+		username.sendKeys(correctusername);                          // successfully enter the username
+		password.sendKeys(incorrectpassword);                        // successfully enter the password
 		driver.findElement(By.xpath("//button[text()='Log In']")).click();
 		String actualError = driver.findElement(By.xpath("//li[text()='Please enter a correct username and password. Note that both fields may be case-sensitive.']")).getText();
-		Assert.assertEquals(actualError, expectedError);                  // to verify the error message
+		Assert.assertEquals(actualError, expectedError);             // to verify the error message
 		Reporter.log("successfully got the error message of the login", true);
+	}
+
+	// to check for the unsuccessfull login page with spaces in the first and wrong password
+	@Test
+	public void toCheckforUnsuccessfullLoginwithSpacefield() {
+		WebElement username = driver.findElement(By.id("username")); // to identify the webElement of the Username textfield
+		WebElement password = driver.findElement(By.id("password")); // to identify the webelement of the password textfield
+		username.sendKeys(correctusername);                          // successfully enter the username
+		password.sendKeys(incorrecrpassword2);                       // successfully enter the password
+		driver.findElement(By.xpath("//button[text()='Log In']")).click();
+		String actualError = driver.findElement(By.xpath("//li[text()='Please enter a correct username and password. Note that both fields may be case-sensitive.']")).getText();
+		Assert.assertEquals(actualError, expectedError); // to verify the error message
+		Reporter.log("successfully got the error message of the login", true);
+
+	}
+
+	// to check for the unsuccessfull login page with spaces in the first and corect
+	// password
+	@Test
+	public void toCheckforUnsuccessfullLoginwithSpaceCorrectpasswordfield() {
+		WebElement username = driver.findElement(By.id("username")); // to identify the webElement of the Username textfield
+		WebElement password = driver.findElement(By.id("password")); // to identify the webelement of the password textfield
+		username.sendKeys(correctusername);                          // successfully enter the username
+		password.sendKeys(incorrecrpassword3);                       // successfully enter the password
+		driver.findElement(By.xpath("//button[text()='Log In']")).click();
+		String actualError = driver.findElement(By.xpath("//li[text()='Please enter a correct username and password. Note that both fields may be case-sensitive.']")).getText();
+		Assert.assertEquals(actualError, expectedError);             // to verify the error message
+		Reporter.log("successfully got the error message of the login", true);
+
 	}
 
 	// to close the browser
 	@AfterClass
 	public void toCloseBrowser() {
 		Reporter.log("Successfully browser got close", true);
-		driver.quit();                                                   // to close the browser
+		driver.quit();                                               // to close the browser
 	}
 
 }
