@@ -1,0 +1,72 @@
+package GermanIsCalling;
+
+import java.time.Duration;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.testng.Assert;
+import org.testng.Reporter;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Test;
+
+public class successfull_Login {
+	public WebDriver driver;
+	String expectedHomePageTitle = "Login | Germany Is Calling";
+	String correctusername = "padmanava720@gmail.com";
+	String correctpassword = "Paddy$7735";
+	String expectedLandingHomepage = "Upload your CV | Germany Is Calling";
+
+	// To launch an empty browser
+	@BeforeClass
+	public void toLaunchtheBrowser() {
+		driver = new ChromeDriver();     // to launch an empty browser
+		Reporter.log("Successfully browser got launched", true);   //to print the statement and add to the report on the indes and email based
+		driver.manage().window().maximize();     // to maximize the browser
+		Reporter.log("Successfully browser got maximized", true);
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(15));    // to wait till webElement are loaded
+	}
+
+	// To nevigate to the application page and verify
+	@BeforeMethod
+	public void toNevigatetoApplication() {
+		driver.get("https://app.germanyiscalling.com/common/login/?next=https%3A%2F%2Fapp.germanyiscalling.com%2Fcv%2Fhome%2F"); // to nevigate to the application
+		String actualHomepageTitle = driver.getTitle();    //to save the title of the webpage 
+		Assert.assertEquals(actualHomepageTitle, expectedHomePageTitle);     // to verify the same page is opened or not
+		Reporter.log("Successfullly nevigated to Germany is Calling login webpage", true);
+	}
+
+	// To check for the Successfull login page
+	@Test
+	public void toCheckForSuccessfullLogin() {
+		WebElement username = driver.findElement(By.id("username")); // to identify the webElement of the Username textfield and store as a webelement
+		WebElement password = driver.findElement(By.id("password")); // to identify the webElement of the Password textfield and store as a webelement
+		username.sendKeys(correctusername);
+		password.sendKeys(correctpassword);
+		driver.findElement(By.xpath("//button[text()='Log In']")).click();  
+		String actualLandingHomepage = driver.getTitle();
+		Assert.assertEquals(actualLandingHomepage, expectedLandingHomepage); // to verify the homepage after login are correct or not
+		Reporter.log("successfully nevigated to the Homepage after login", true);
+
+	}
+
+	// To logout from the application
+	@AfterMethod
+	public void toCloseTheApplication() {
+		driver.findElement(By.xpath("//span[text()='Padmanava Behera']")).click(); // to identify the webElement for the logout option
+		driver.findElement(By.partialLinkText("Logout")).click();
+		Reporter.log("successfully nevigated to the login page", true);
+	}
+
+	// to close the browser
+	@AfterClass
+	public void tocloseBrowser() {
+		Reporter.log("Successfully Browser got closed", true);
+		driver.quit(); // to close the browser
+	}
+}
